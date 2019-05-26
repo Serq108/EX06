@@ -1,7 +1,7 @@
 import sys
 import sqlite3
 
-DATA_TYPES = ['NULL', 'INTEGER', 'TEXT']
+DATA_TYPES = ['NULL', 'INTEGER', 'TEXT', 'INTEGER PRIMARY KEY AUTOINCREMENT']
 FLAG_COL = [None, 'NOT NULL']
 
 
@@ -54,14 +54,11 @@ def check_entry_list(listname, chklist):
 
 
 def sqlreq_create_tab(name_t,name_col, type_data, flag_col):
-    sql_str = 'CREATE TABLE '
     if check_str(name_t):
-        sql_str += name_t
+        pass
     else:
         print('invalid argumets')
         sys.exit()
-    sql_str += ' (id INTEGER PRIMARY KEY AUTOINCREMENT, '
-
     if len(name_col) == len(type_data) == len(flag_col):
         pass
     else:
@@ -86,6 +83,7 @@ def sqlreq_create_tab(name_t,name_col, type_data, flag_col):
         print('invalid argumets')
         sys.exit()
 
+    sql_str = 'CREATE TABLE ' + name_t + '('
     for i, cols in enumerate(name_col):
         sql_str += cols + ' '+ type_data[i] + ' '
         if flag_col[i]:
@@ -133,6 +131,33 @@ def sql_updt(name_t, col_name, old_value, new_value):
     sql_str += col_name + ' = ' + "'" + new_value + "'" + ' WHERE '\
         + col_name + ' = ' + "'" + old_value + "'"
     return sql_str
+
+
+def sql_sel_fr_tab(name_t, list_col):
+    sql_str = 'SELECT '
+    for i, item in enumerate(list_col):
+        if i < len(list_col) - 1:
+            sql_str += item + ', '
+        else:
+            sql_str += item
+    sql_str += ' FROM ' + name_t
+    return sql_str
+
+
+def sql_join(tab1, tab2, list_col, fkid, fkey):
+    fkid = fkid.replace('(','.')
+    sql_str = 'SELECT '
+
+    for i, item in enumerate(list_col):
+        if i < len(list_col) - 1:
+            sql_str += item + ', '
+        else:
+            sql_str += item
+    sql_str += ' FROM ' + tab1 + ' LEFT JOIN ' + tab2 + \
+        ' ON ' + fkid + ' = ' + tab1 + '.' + fkey
+    return sql_str
+
+
 
 
 if __name__ == '__main__':
