@@ -21,7 +21,7 @@ def check_int(intn):
         return False
 
 
-def entry_check(strn,list_str):
+def entry_check(strn, list_str):
     entering = False
     for item in list_str:
         if strn == item:
@@ -33,6 +33,7 @@ def del_item(item, list_item):
     for i, it in enumerate(list_item):
         if it == item:
             del list_item[i]
+
 
 def check_name_col(listname):
     check_flag = True
@@ -53,7 +54,7 @@ def check_entry_list(listname, chklist):
     return check_flag
 
 
-def sqlreq_create_tab(name_t,name_col, type_data, flag_col):
+def sqlreq_create_tab(name_t, name_col, type_data, flag_col):
     if check_str(name_t):
         pass
     else:
@@ -85,7 +86,7 @@ def sqlreq_create_tab(name_t,name_col, type_data, flag_col):
 
     sql_str = 'CREATE TABLE ' + name_t + '('
     for i, cols in enumerate(name_col):
-        sql_str += cols + ' '+ type_data[i] + ' '
+        sql_str += cols + ' ' + type_data[i] + ' '
         if flag_col[i]:
             sql_str += flag_col[i] + ' '
         if i < len(name_col) - 1:
@@ -96,7 +97,7 @@ def sqlreq_create_tab(name_t,name_col, type_data, flag_col):
 
 
 def sqlreq_create_tab_fk(name_t, name_col, type_data, flag_col, fkey, fkid):
-    sql_str = sqlreq_create_tab(name_t,name_col, type_data, flag_col)
+    sql_str = sqlreq_create_tab(name_t, name_col, type_data, flag_col)
     sql_str = sql_str[:-2] + ', ' + 'FOREIGN KEY ('
     sql_str += fkey + ')' + ' REFERENCES ' + fkid + ');'
     return sql_str
@@ -145,7 +146,7 @@ def sql_sel_fr_tab(name_t, list_col):
 
 
 def sql_join(tab1, tab2, list_col, fkid, fkey):
-    fkid = fkid.replace('(','.')
+    fkid = fkid.replace('(', '.')
     sql_str = 'SELECT '
 
     for i, item in enumerate(list_col):
@@ -158,11 +159,9 @@ def sql_join(tab1, tab2, list_col, fkid, fkey):
     return sql_str
 
 
-
-
 if __name__ == '__main__':
-    conn = sqlite3.connect("my_lite.db") # или :memory: чтобы сохранить в RAM
+    conn = sqlite3.connect("my_lite.db")  # или :memory: чтобы сохранить в RAM
     cursor = conn.cursor()
     # cursor.execute(sqlreq_create_tab(name_t,name_col, type_data, flag_col))
-    print('fk', cursor.execute( "PRAGMA foreign_keys" ))
+    print('fk', cursor.execute("PRAGMA foreign_keys"))
     conn.commit()
